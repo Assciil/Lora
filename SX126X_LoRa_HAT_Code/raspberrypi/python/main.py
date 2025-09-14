@@ -66,6 +66,7 @@ def get_cpu_temp():
 node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)
 
 def send_deal():
+    print("Hii")
     get_rec = ""
     print("")
     print("input a string such as \033[1;32m0,868,Hello World\033[0m,it will send `Hello World` to lora node device of address 0 with 868M ")
