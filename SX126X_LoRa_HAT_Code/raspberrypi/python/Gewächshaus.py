@@ -9,7 +9,7 @@ from threading import Timer
 
 import struct
 
-def send_float_as_text(addr: int, freq_mhz: int, value: float):
+def send_float(addr: int, freq_mhz: int, value: float):
     base = 850 if int(freq_mhz) > 850 else 410
     offset_frequence = int(freq_mhz) - base
 
