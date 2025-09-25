@@ -7,8 +7,7 @@ import termios
 import tty
 from threading import Timer
 
-old_settings = termios.tcgetattr(sys.stdin)
-tty.setcbreak(sys.stdin.fileno())
-
 if __name__ == "__main__":
-    print("Hello World")
+    node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)
+    while True:
+        node.receive()
