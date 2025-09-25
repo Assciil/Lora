@@ -251,45 +251,27 @@ class sx126x:
         time.sleep(0.1)
 
 
-    def receive(self, encoding="utf-8", echo=True):
-        # kompatibel zu neueren/älteren pyserial-Versionen
-        in_waiting = getattr(self.ser, "in_waiting", self.ser.inWaiting)()
-        if in_waiting <= 0:
-            return None
+    def receive(self):
+        if self.ser.inWaiting() > 0:
+            time.sleep(0.5)
+            r_buff = self.ser.read(self.ser.inWaiting())
 
-        import time
-        time.sleep(0.5)
-        r_buff = self.ser.read(in_waiting)
+            print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
+            message = str(r_buff[3:-1],end='\r\n')
+            print("message is "+ message)
 
-        # Mindestlänge prüfen: 2 Bytes Addr + 1 Byte Freq + 1 Byte RSSI = mind. 4 Bytes
-        if len(r_buff) < 4:
-            return None
-
-        addr = (r_buff[0] << 8) | r_buff[1]
-        freq_mhz = (r_buff[2] + self.start_freq)  # dein Print hängt ".125MHz" dran
-        rssi_dbm = -(256 - r_buff[-1])
-
-        payload_bytes = r_buff[3:-1]
-        # Bytes -> String
-        message = payload_bytes.decode(encoding, errors="replace")
-
-        if echo:
-            print(
-                "receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"
-                % (addr, freq_mhz),
-                end="\r\n",
-                flush=True,
-            )
-            print("message is " + message)
+            
+            
+            # print the rssi
             if self.rssi:
-                print("the packet rssi value: {0}dBm".format(rssi_dbm))
+                # print('\x1b[3A',end='\r')
+                print("the packet rssi value: -{0}dBm".format(256-r_buff[-1:][0]))
                 self.get_channel_rssi()
+            else:
+                pass
+                #print('\x1b[2A',end='\r')
 
-        # optional aufräumen: Zeilenenden/NUL entfernen
-        message = message.strip("\r\n\0")
-        return message
-
-
+            return str(r_buff[3:-1])
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
