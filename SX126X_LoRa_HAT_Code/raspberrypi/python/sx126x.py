@@ -257,7 +257,10 @@ class sx126x:
             r_buff = self.ser.read(self.ser.inWaiting())
 
             print("receive message from node address with frequence\033[1;32m %d,%d.125MHz\033[0m"%((r_buff[0]<<8)+r_buff[1],r_buff[2]+self.start_freq),end='\r\n',flush = True)
-            print("message is "+str(r_buff[3:-1]),end='\r\n')
+            message = str(r_buff[3:-1],end='\r\n')
+            print("message is "+ message)
+
+            
             
             # print the rssi
             if self.rssi:
@@ -267,6 +270,12 @@ class sx126x:
             else:
                 pass
                 #print('\x1b[2A',end='\r')
+
+            message = message.decode("ascii")     # oder "utf-8"
+            # optional: Zeilenenden o.ä. entfernen
+            message = message.strip("\r\n\0")
+            return message
+    
 
             return str(r_buff[3:-1])
 
