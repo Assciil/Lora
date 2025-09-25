@@ -9,7 +9,7 @@ from threading import Timer
 
 import struct
 
-def send_float(addr: int, freq_mhz: int, value: float):
+def send_float(addr: int, freq_mhz: int, value: str):
     """
     Schickt einen Float-Wert als 4-Byte IEEE-754 (little-endian) an einen Ziel-Node.
 
@@ -40,5 +40,5 @@ def send_float(addr: int, freq_mhz: int, value: float):
 if __name__ == "__main__":
     node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)
     while True:
-        send_float(0, 868, 23.5)  
+        send_float(0, 868, 'Hello World')  # Beispielwert
         time.sleep(20)  # Warte 20 s bis zum nächsten Senden
