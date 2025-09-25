@@ -268,6 +268,8 @@ class sx126x:
                 pass
                 #print('\x1b[2A',end='\r')
 
+            return str(r_buff[3:-1])
+
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
