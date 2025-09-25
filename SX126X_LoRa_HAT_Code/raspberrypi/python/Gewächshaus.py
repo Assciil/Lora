@@ -22,7 +22,7 @@ def send_float(addr: int, freq_mhz: int, value: float):
     offset_frequence = int(freq_mhz) - base
 
     # Float in 4 Bytes wandeln (little-endian 32-bit)
-    payload = struct.pack('<f', str(value))
+    payload = struct.pack('<f', float(value))
 
     # Paket wie gehabt aufbauen: [dst_hi][dst_lo][dst_off][src_hi][src_lo][src_off][payload...]
     data = bytes([
