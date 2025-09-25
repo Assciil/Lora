@@ -9,22 +9,14 @@ from threading import Timer
 
 import struct
 
-def send_float(addr: int, freq_mhz: int, value: float):
-    """
-    Schickt einen Float-Wert als 4-Byte IEEE-754 (little-endian) an einen Ziel-Node.
-
-    addr      : Zieladresse (0..65535)
-    freq_mhz  : Frequenz in MHz (z.B. 868)
-    value     : zu sendender Float-Wert
-    """
-    # Offset-Frequenz wie in deinem Original
+def send_float_as_text(addr: int, freq_mhz: int, value: float):
     base = 850 if int(freq_mhz) > 850 else 410
     offset_frequence = int(freq_mhz) - base
 
-    # Float in 4 Bytes wandeln (little-endian 32-bit)
-    payload = struct.pack('<f', float(value))
+    # Float → String (z. B. 2 Nachkommastellen, Punkt als Dezimaltrenner)
+    text = f"{value:.2f}"              # → "23.75"
+    payload = text.encode("utf-8")     # String → Bytes
 
-    # Paket wie gehabt aufbauen: [dst_hi][dst_lo][dst_off][src_hi][src_lo][src_off][payload...]
     data = bytes([
         (addr >> 8) & 0xFF,
         addr & 0xFF,
@@ -35,6 +27,7 @@ def send_float(addr: int, freq_mhz: int, value: float):
     ]) + payload
 
     node.send(data)
+
 
 
 if __name__ == "__main__":
