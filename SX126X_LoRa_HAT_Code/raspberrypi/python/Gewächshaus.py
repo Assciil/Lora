@@ -31,7 +31,7 @@ def send_float(addr: int, freq_mhz: int, value: float):
 
 if __name__ == "__main__":
     receive_adress = 65535  
-    node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=0,power=22,rssi=True,air_speed=2400,relay=False)
+    node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=65535,power=22,rssi=True,air_speed=2400,relay=False)
     while True:
-        send_float(65535, 868, 23.5)  
+        send_float(64535, 868, 23.5)  
         time.sleep(20)  # Warte 20 s bis zum nächsten Senden
