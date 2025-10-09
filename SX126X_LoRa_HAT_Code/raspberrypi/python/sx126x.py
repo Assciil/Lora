@@ -79,12 +79,19 @@ class sx126x:
 
     def __init__(self,serial_num,freq,addr,power,rssi,air_speed=2400,\
                  net_id=0,buffer_size = 240,crypt=0,\
-                 relay=False,lbt=False,wor=False):
+                 relay=False,lbt=False,wor=False, duty_cycle=0.01):
         self.rssi = rssi
         self.addr = addr
         self.freq = freq
         self.serial_n = serial_num
         self.power = power
+
+        # Duty-Cycle Control
+        self.duty_cycle = float(duty_cycle)  # e.g. 0.01 for 1%
+        self._ota_bps = None                 # on-air bitrate for conservative airtime estimate
+        self._next_tx_at = 0.0               # earliest timestamp when next TX is allowed
+        self._dc_overhead_bytes = 20         # conservative protocol overhead (preamble/header/CRC)
+
         # Initial the GPIO for M0 and M1 Pin
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -122,6 +129,14 @@ class sx126x:
         
         air_speed_temp = self.lora_air_speed_dic.get(air_speed,None)
         # if air_speed_temp != None
+
+        # Duty-Cycle 
+        # Use the numeric key (bps) as our conservative on-air bitrate
+        if isinstance(air_speed, (int, float)):
+            self._ota_bps = float(air_speed)  
+        else:
+            # fallback if someone passes a preset name etc.
+            self._ota_bps = 2400.0
         
         buffer_size_temp = self.lora_buffer_size_dic.get(buffer_size,None)
         # if air_speed_temp != None:
@@ -236,11 +251,53 @@ class sx126x:
             print("Power is {0} dBm" + lora_power_dic.get(None,power_temp))
             GPIO.output(M1,GPIO.LOW)
 
-#
-# the data format like as following
-# "node address,frequence,payload"
-# "20,868,Hello World"
+    #Duty-Cycle: conservative airtime estimator 
+    def _estimate_airtime_s(self, payload_len_bytes:int) -> float:
+        """
+        Conservative airtime estimate:
+        (payload + overhead) * 8 / on-air bitrate
+        NOTE: This is NOT the precise LoRa CSS airtime (depends on SF/BW/CR),
+        but it's a safe upper bound if _ota_bps is set conservatively.
+        """
+        if not self._ota_bps or self._ota_bps <= 0:
+            # fallback to very slow rate to be safe
+            self._ota_bps = 1200.0
+        bits = (payload_len_bytes + self._dc_overhead_bytes) * 8.0
+        return bits / self._ota_bps
+    
+    def _duty_cycle_backoff(self, airtime_s: float):
+        """
+        Enforce DC by waiting until _next_tx_at.
+        For DC = d, required off-time = airtime * (1-d)/d  -> for 1%: 99 * airtime
+        """
+        now = time.time()
+        if now < self._next_tx_at:
+            time.sleep(self._next_tx_at - now)
+        # After actual TX completes, schedule next allowed time:
+        if self.duty_cycle > 0.0:
+            t_off = airtime_s * (1.0 - self.duty_cycle) / self.duty_cycle
+        else:
+            t_off = 0.0
+        self._next_tx_at = time.time() + t_off
+
+    # public setters
+    def set_duty_cycle(self, dc: float):
+        self.duty_cycle = max(0.0, min(1.0, float(dc)))
+
+    def set_overhead_bytes(self, n: int):
+        self._dc_overhead_bytes = max(0, int(n))
+
+
+
     def send(self,data):
+        # Estimate airtime from payload length and configured on-air bitrate
+        t_on = self._estimate_airtime_s(len(data))
+
+        # Wait if needed (previous TX imposed a backoff)
+        now = time.time()
+        if now < self._next_tx_at:
+            time.sleep(self._next_tx_at - now)
+
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)
@@ -248,6 +305,9 @@ class sx126x:
         self.ser.write(data)
         # if self.rssi == True:
             # self.get_channel_rssi()
+
+        # Enforce post-TX backoff to honor duty-cycle
+        self._duty_cycle_backoff(t_on)
         time.sleep(0.1)
 
 
