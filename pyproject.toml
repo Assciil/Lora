@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sx126x-pi"           # beliebiger Paketname
+version = "0.1.0"
+description = "SX126x/E22 driver for Raspberry Pi (GPIO + UART)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "pyserial>=3.5",
+  "RPi.GPIO; platform_system=='Linux'"  # nur auf Pi relevant
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

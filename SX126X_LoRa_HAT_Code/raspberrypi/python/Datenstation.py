@@ -17,7 +17,7 @@ def writeToFile(value, path="data.txt"):
         f.write(zeile + "\n")
 
 if __name__ == "__main__":
-    node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=64535,power=22,rssi=True,air_speed=2400,relay=False)
+    node = sx126x.sx126x(serial_num = "/dev/ttyS0",freq=868,addr=64535,power=22,rssi=True,air_speed=2400,relay=False, duty_cycle=0.01)
     while True:
         text = node.receive()
         if text is not None:
