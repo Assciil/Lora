@@ -27,6 +27,13 @@ Die Jumper sind gemäß Bild zusetzen
 3. Installation
 
 
+python3 -m venv ~/venvs/lora
+source ~/venvs/lora/bin/activate
+pip install "git+https://github.com/Assciil/Lora.git@main"
+
+
+
+
 
 
 4. Example Code
