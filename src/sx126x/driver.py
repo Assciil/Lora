@@ -351,3 +351,22 @@ class sx126x:
             # pass
             print("receive rssi value fail")
             # print("receive rssi value fail: ",re_temp)
+
+    def send_float(self, addr: int, freq_mhz: int, value: float):
+        base = 850 if int(freq_mhz) > 850 else 410
+        offset_frequence = int(freq_mhz) - base
+
+        # Float → String (z. B. 2 Nachkommastellen, Punkt als Dezimaltrenner)
+        text = f"{value:.2f}"              # → "23.75"
+        payload = text.encode("utf-8")     # String → Bytes
+
+        data = bytes([
+            (addr >> 8) & 0xFF,
+            addr & 0xFF,
+            offset_frequence & 0xFF,
+            (self.addr >> 8) & 0xFF,
+            self.addr & 0xFF,
+            self.offset_freq & 0xFF,
+        ]) + payload
+
+        self.send(data)
