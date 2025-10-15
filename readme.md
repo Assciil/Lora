@@ -26,15 +26,16 @@ Die Jumper sind gemäß Bild zusetzen
 
 3. Installation
 
+3.1 Virtuelleumgebung bauen und aktivieren
+sudo apt install -y python3 python3-venv python3-pip
+cd <Projektverzeichnis>
+python3 -m venv .<venv name>
+source .<venv name>/bin/activate
 
-python3 -m venv ~/venvs/lora
-source ~/venvs/lora/bin/activate
+3.2 Pakete installieren
+pip install -U pip
+pip install pyserial RPi.GPIO
 pip install "git+https://github.com/Assciil/Lora.git@main"
-
-
-
-
-
 
 4. Example Code
 
