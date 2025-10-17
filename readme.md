@@ -1,9 +1,5 @@
-> **Disclaimer:**  
-> Dieses Repository wurde im Rahmen eines universitären Forschungsprojekts zur Unterstützung der Lehrveranstaltung  
-> „Analyse und Entwurf von Systemen“ von **Daniel Wiebe** und **Herbert Palm** im **Wintersemester 2025/2026** entwickelt.  
-> Es basiert auf dem von *Waveshare* veröffentlichten Code [4] und dient als Grundlage für ein begleitendes Praxisprojekt,  
-> in dem Studierende die in der Vorlesung vermittelten Konzepte des Systems Engineering umsetzen  
-> und praktische Erfahrungen in der Mikrocontroller- und Python-Programmierung sammeln.
+**Disclaimer:** 
+Dieses Repository wurde im Rahmen eines universitären Forschungsprojekts zur Unterstützung der Lehrveranstaltung „Analyse und Entwurf von Systemen“ von **Daniel Wiebe** und **Herbert Palm** im **Wintersemester 2025/2026** entwickelt. Es basiert auf dem von *Waveshare* veröffentlichten Code [4] und dient als Grundlage für ein begleitendes Praxisprojekt, in dem Studierende die in der Vorlesung vermittelten Konzepte des Systems Engineering umsetzen und praktische Erfahrungen in der Mikrocontroller- und Python-Programmierung sammeln.
 
 ### 1. Einleitung  
 Long Range (LoRa) ist eine Modulationsart, mit der kleine Datenmengen, beispielsweise Sensormesswerte, energieeffizient und leitungsfrei über mehrere Kilometer hinweg (Waveshare HAT 5km, sonnige Tag, open area [3]) übertragen werden können. Sie basiert auf einer Chirp-Spread-Spectrum-Modulation (CSS), die eine hohe Robustheit gegenüber Störungen bietet.
