@@ -28,17 +28,24 @@ pip install "git+https://github.com/Assciil/Lora.git@main"
 
 4. Example Code  
 
-4.1 Transmitter  
-from sx126x import sx126x  
-import time  
+### 4.1 Transmitter
 
-if __name__ == "__main__":  
-    node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=63535,power=22,rssi=True,air_speed=2400, buffer_size=128, relay=False, duty_cycle=0.01)  
-    while True:  
-        node.send_float(64535, 868, 23.5)  
-        time.sleep(10)  
+```python
+from sx126x import sx126x
+import time
 
-4.2 Receiver  
+if __name__ == "__main__":
+    node = sx126x(serial_num="/dev/ttyS0", freq=868, addr=63535, power=22)
+    while True:
+        node.send_float(64535, 868, 23.5)
+        print("Daten gesendet!")
+        time.sleep(10)
+        
+```
+
+
+###4.2 Receiver  
+```python
 from datetime import datetime  
 from sx126x import sx126x  
 
@@ -47,7 +54,8 @@ if __name__ == "__main__":
     while True:  
         text = node.receive()  
         if text is not None:  
-            print("Received:", text)  
+            print("Received:", text) 
+```
 
 [1] https://papers.academic-conferences.org/index.php/eccws/article/view/3575  
 [2] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10122600  
