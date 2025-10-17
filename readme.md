@@ -11,7 +11,7 @@ In Europa erfolgt der Betrieb im unlizenzierten ISM/SRD-Band 863–870 MHz, das 
 ### 2. Hardwareaufbau - LoRa Kommunikation zwischen zwei Raspberry Pis  
 Für die Punkt-zu-Punkt-Kommunikation werden zwei Raspberry Pis identisch konfiguriert. Auf beide wird je ein "SX1262 868M LoRa HAT" -Modul aufgesteckt. Auf jedem Modul wir eine Antenne aufgeschraubt und die Jumper gemäß untenstehendem Bild gesetzt.
 
-Die Jumper sind bei beiden  
+Die Jumper sind bei beiden gemäß folgender Grafik zusetzen: 
 ![alt text](Jumper%20Config.png)
 
 ### 3. Installation  
