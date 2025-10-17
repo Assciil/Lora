@@ -16,7 +16,7 @@ Die Jumper sind bei beiden
 
 ### 3. Installation  
 
-#### 3.1 Virtuelleumgebung bauen und aktivieren  
+### 3.1 Virtuelleumgebung bauen und aktivieren  
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
 cd <Projektverzeichnis>  
@@ -24,7 +24,7 @@ python3 -m venv .<venv name>
 source .<venv name>/bin/activate  
 ```
 
-#### 3.2 Pakete installieren  
+### 3.2 Pakete installieren  
 ```bash
 pip install -U pip  
 pip install pyserial RPi.GPIO  
