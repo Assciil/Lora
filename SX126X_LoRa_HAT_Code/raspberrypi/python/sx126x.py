@@ -44,13 +44,13 @@ class sx126x:
     SX126X_UART_BAUDRATE_57600 = 0xC0
     SX126X_UART_BAUDRATE_115200 = 0xE0
 
-    
+    #Number of bytes per Lora package
     SX126X_PACKAGE_SIZE_240_BYTE = 0x00
     SX126X_PACKAGE_SIZE_128_BYTE = 0x40
     SX126X_PACKAGE_SIZE_64_BYTE = 0x80
     SX126X_PACKAGE_SIZE_32_BYTE = 0xC0
 
-
+    #Sendeleistung
     SX126X_Power_22dBm = 0x00
     SX126X_Power_17dBm = 0x01
     SX126X_Power_13dBm = 0x02
@@ -81,7 +81,7 @@ class sx126x:
     }
 
     def __init__(self,serial_num,freq,addr,power,rssi,air_speed=2400,\
-                 net_id=0,buffer_size = 240,crypt=0,\
+                 net_id=0, buffer_size = 240,crypt=0,\
                  relay=False,lbt=False,wor=False, duty_cycle=0.01):
         self.rssi = rssi
         self.addr = addr
@@ -352,13 +352,11 @@ class sx126x:
             print("receive rssi value fail")
             # print("receive rssi value fail: ",re_temp)
 
-    def send_float(self, addr: int, freq_mhz: int, value: float):
+    def send_float(self, addr: int, freq_mhz: int, string: str):
         base = 850 if int(freq_mhz) > 850 else 410
         offset_frequence = int(freq_mhz) - base
 
-        # Float → String (z. B. 2 Nachkommastellen, Punkt als Dezimaltrenner)
-        text = f"{value:.2f}"              # → "23.75"
-        payload = text.encode("utf-8")     # String → Bytes
+        payload = string.encode("utf-8")     # String -> Bytes
 
         data = bytes([
             (addr >> 8) & 0xFF,
