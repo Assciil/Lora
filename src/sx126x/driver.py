@@ -331,7 +331,7 @@ class sx126x:
                 pass
                 #print('\x1b[2A',end='\r')
 
-            return float(r_buff[3:-1].decode("utf-8").strip())
+            return r_buff[3:-1].decode("utf-8")
 
     def get_channel_rssi(self):
         GPIO.output(self.M1,GPIO.LOW)
