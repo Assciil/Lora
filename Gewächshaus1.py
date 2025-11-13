@@ -6,4 +6,4 @@ if __name__ == "__main__":
     node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=63535,power=13,rssi=True,air_speed=2400, relay=False, duty_cycle=0.01, buffer_size = 240)
     while True:
         node.send_string(64535, 868, string)  
-        time.sleep(2)  
+        #time.sleep(2)  
