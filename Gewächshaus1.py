@@ -7,5 +7,5 @@ if __name__ == "__main__":
     while True:
         node.send_string(64535, 868, string)
         print("Sent")
-        time.sleep(10)  
+        time.sleep(5)  
         
