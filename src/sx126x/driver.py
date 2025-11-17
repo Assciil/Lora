@@ -93,7 +93,7 @@ class sx126x:
         self.duty_cycle = float(duty_cycle)  # e.g. 0.01 for 1%
         self._ota_bps = None                 # on-air bitrate for conservative airtime estimate
         self._next_tx_at = 0.0               # earliest timestamp when next TX is allowed
-        self._dc_overhead_bytes = 10         # conservative protocol overhead (preamble/header/CRC)
+        self._dc_overhead_bytes = 5         # conservative protocol overhead (preamble/header/CRC)
 
         # Initial the GPIO for M0 and M1 Pin
         GPIO.setmode(GPIO.BCM)
@@ -299,9 +299,9 @@ class sx126x:
 
         # Wait if needed (previous TX imposed a backoff)
         now = time.time()
-        if now < self._next_tx_at:
-            print("Waiting %.3f s to satisfy duty-cycle" % (self._next_tx_at - now))
-            time.sleep(self._next_tx_at - now)
+        #if now < self._next_tx_at:
+        #    print("Waiting %.3f s to satisfy duty-cycle" % (self._next_tx_at - now))
+        #    time.sleep(self._next_tx_at - now)
 
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)

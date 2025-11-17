@@ -67,3 +67,15 @@ if __name__ == "__main__":
 [3] https://www.waveshare.com/wiki/SX1262_868M_LoRa_HAT  
 [4] https://files.waveshare.com/upload/1/18/SX126X_LoRa_HAT_CODE.zip
 
+
+
+deactivate
+rm -r ssource .env
+python3 -m venv .env
+source .env/bin/activate
+
+pip install -U pip  
+pip install pyserial RPi.GPIO  
+pip install "git+https://github.com/Assciil/Lora.git@main"  
+
+
