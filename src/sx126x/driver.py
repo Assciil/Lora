@@ -294,7 +294,8 @@ class sx126x:
 
     def send(self,data):
         # Estimate airtime from payload length and configured on-air bitrate
-        #t_on = self._estimate_airtime_s(len(data))
+        t_on = self._estimate_airtime_s(len(data))
+        print("Airtime estimate: %.3f s" % t_on)
 
         # Wait if needed (previous TX imposed a backoff)
         '''now = time.time()
