@@ -294,12 +294,12 @@ class sx126x:
 
     def send(self,data):
         # Estimate airtime from payload length and configured on-air bitrate
-        t_on = self._estimate_airtime_s(len(data))
+        #t_on = self._estimate_airtime_s(len(data))
 
         # Wait if needed (previous TX imposed a backoff)
-        now = time.time()
+        '''now = time.time()
         if now < self._next_tx_at:
-            time.sleep(self._next_tx_at - now)
+            time.sleep(self._next_tx_at - now)'''
 
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
@@ -310,7 +310,7 @@ class sx126x:
             # self.get_channel_rssi()
 
         # Enforce post-TX backoff to honor duty-cycle
-        self._duty_cycle_backoff(t_on)
+        #self._duty_cycle_backoff(t_on)
         time.sleep(0.1)
 
 
