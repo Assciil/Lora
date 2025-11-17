@@ -7,3 +7,4 @@ if __name__ == "__main__":
     while True:
         node.send_string(64535, 868, string)  
         #time.sleep(2)  
+        
