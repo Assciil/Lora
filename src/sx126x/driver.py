@@ -298,20 +298,21 @@ class sx126x:
         print("Airtime estimate: %.3f s" % t_on)
 
         # Wait if needed (previous TX imposed a backoff)
-        '''now = time.time()
+        now = time.time()
         if now < self._next_tx_at:
-            time.sleep(self._next_tx_at - now)'''
+            print("Waiting %.3f s to satisfy duty-cycle" % (self._next_tx_at - now))
+            time.sleep(self._next_tx_at - now)
 
         GPIO.output(self.M1,GPIO.LOW)
         GPIO.output(self.M0,GPIO.LOW)
         time.sleep(0.1)
 
         self.ser.write(data)
-        # if self.rssi == True:
-            # self.get_channel_rssi()
+        if self.rssi == True:
+            self.get_channel_rssi()
 
         # Enforce post-TX backoff to honor duty-cycle
-        #self._duty_cycle_backoff(t_on)
+        self._duty_cycle_backoff(t_on)
         time.sleep(0.1)
 
 
