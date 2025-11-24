@@ -5,7 +5,7 @@ import time
 F_MIN     = 862     # sinnvoll für SX126x im 868-MHz-Band
 F_MAX     = 870     # Beispiel: 868–878 MHz
 STEP_F    = 1       # 1 MHz Schritte
-STEP_T    = 10.0    # alle 10 Sekunden
+STEP_T    = 7.0    # alle 10 Sekunden
 
 ADDR      = [64534, 64535]
 POWER     = 22
@@ -40,8 +40,8 @@ if __name__ == "__main__":
             # alle 10 s um 1 MHz erhöhen, solange freq <= F_MAX
             if (now - last_time) >= STEP_T:
                 last_time = now
-                print(datetime.now(), "Tuning to frequency:", freq, "MHz")
                 freq += STEP_F
+                print(datetime.now(), "Tuning to frequency:", freq, "MHz")
                 # HIER deine set()-Methode verwenden
                 node.set_frequency(freq)
 
