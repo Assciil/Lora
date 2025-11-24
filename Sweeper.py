@@ -2,25 +2,23 @@ from datetime import datetime
 from sx126x import sx126x
 import time
 
-F_MIN     = 862     # sinnvoll für SX126x im 868-MHz-Band
-F_MAX     = 864     # Beispiel: 868–878 MHz
-STEP_F    = 1       # 1 MHz Schritte
-STEP_T    = 7.0    # alle 10 Sekunden
+F_MIN     = 862      # MHz
+F_MAX     = 864      # MHz
+STEP_F    = 1        # 1 MHz Schritte
+STEP_T    = 7.0      # alle 7 Sekunden
 
-ADDR      = [64534, 64535]
+ADDR_LIST = [64534, 64535]
 POWER     = 22
 RSSI_ON   = True
 AIR_SPEED = 2400
 BUFFER_SZ = 64
 
 if __name__ == "__main__":
-    freq = F_MIN
-    last_time = time.monotonic()
-
+    # Node einmal initialisieren, irgendeine Startadresse ist ok
     node = sx126x(
         serial_num="/dev/ttyS0",
         freq=F_MIN,
-        addr=ADDR[0],
+        addr=ADDR_LIST[0],
         power=POWER,
         rssi=RSSI_ON,
         air_speed=AIR_SPEED,
@@ -28,29 +26,52 @@ if __name__ == "__main__":
         duty_cycle=0.01,
         buffer_size=BUFFER_SZ,
     )
-    for address in ADDR:
-        node.set_address(address)
-        freq = F_MIN
-        node.set_frequency(freq)
-        print(datetime.now(), "Tuning to frequency:", freq, "MHz")
-        # läuft dauerhaft weiter, Frequenz wird nur bis F_MAX hochgerampt
 
-        while freq <= F_MAX:
+    for address in ADDR_LIST:
+        print(f"\n=== Starte Rampe für Adresse {address} ===")
+
+        # Startwerte für diese Adresse
+        freq = F_MIN
+        last_time = time.monotonic()
+
+        # Startfrequenz für diese Adresse setzen
+        node.set(
+            freq=freq,
+            addr=address,
+            power=POWER,
+            rssi=RSSI_ON,
+            air_speed=AIR_SPEED,
+            buffer_size=BUFFER_SZ,
+            relay=False,
+        )
+        print(datetime.now(), "Tuning to frequency:", freq, "MHz @ addr", address)
+
+        # Rampe: alle STEP_T Sekunden +1 MHz, bis F_MAX erreicht
+        while True:
             now = time.monotonic()
 
-            # alle 10 s um 1 MHz erhöhen, solange freq <= F_MAX
+            # alle STEP_T Sekunden einen Schritt
             if (now - last_time) >= STEP_T:
                 last_time = now
+
+                # wenn wir schon bei F_MAX sind, fertig mit dieser Adresse
+                if freq >= F_MAX:
+                    break
+
                 freq += STEP_F
-                print(datetime.now(), "Tuning to frequency:", freq, "MHz")
-                # HIER deine set()-Methode verwenden
-                node.set_frequency(freq)
+                print(datetime.now(), "Tuning to frequency:", freq, "MHz @ addr", address)
 
+                node.set(
+                    freq=freq,
+                    addr=address,
+                    power=POWER,
+                    rssi=RSSI_ON,
+                    air_speed=AIR_SPEED,
+                    buffer_size=BUFFER_SZ,
+                    relay=False,
+                )
 
-            # kein delay im Hauptloop – du empfängst permanent
+            # kein delay im Loop – Empfang läuft kontinuierlich
             text = node.receive()
             if text is not None:
                 print("Received:", text)
-
-            
-        

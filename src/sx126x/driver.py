@@ -108,18 +108,6 @@ class sx126x:
         self.ser.flushInput()
         self.set(freq,addr,power,rssi,air_speed,net_id,buffer_size,crypt,relay,lbt,wor)
 
-    def get_address(self):
-        return self.addr
-    
-    def set_address(self,addr:int):
-        self.addr = addr
-
-    def get_frequency(self):
-        return self.freq
-    
-    def set_frequency(self,freq:int):
-        self.freq = freq
-
     def set(self,freq,addr,power,rssi,air_speed=2400,\
             net_id=0,buffer_size = 240,crypt=0,\
             relay=False,lbt=False,wor=False):
