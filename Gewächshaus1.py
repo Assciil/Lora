@@ -2,10 +2,12 @@ from sx126x import sx126x
 import time
 
 if __name__ == "__main__":
-    string = "Hallo Willi, wie geht's? Lange schon nichts mehr von dir gehört. Ich hoffe, alles ist in Ordnung bei dir. Melde dich mal wieder. Liebe Grüße! From Lisa."
+    counter = 0
+    string = "Schatz 1: liegt in Raum XYZ bei dem Pult. Du kannst es abholen und 62234 nach dem Code fragen."
     node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=63535,power=22,rssi=True,air_speed=2400, relay=False, duty_cycle=0.01, buffer_size = 32)
     while True:
         node.send_string(64535, 868, string)
-        print("Schatz 1: liegt in Raum XYZ bei dem Pult. Du kannst es abholen und 62234 nach dem Code fragen.")
-        #time.sleep(5)  
+        print("Send: ", counter)
+        time.sleep(5)
+        counter += 1  
         
