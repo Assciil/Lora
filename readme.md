@@ -16,6 +16,12 @@ Die Jumper sind bei beiden gemäß folgender Grafik zusetzen:
 
 ### 3. Installation  
 
+### 3.1 Enable serial Port
+```bash
+sudo raspi-config
+```
+Choose Interfacing Options -> Serial -> No -> Yes.
+
 ### 3.1 Virtuelleumgebung bauen und aktivieren  
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
