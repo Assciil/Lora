@@ -21,11 +21,12 @@ Die Jumper sind bei beiden gemäß folgender Grafik zusetzen:
 sudo raspi-config
 ```
 Choose Interfacing Options -> Serial -> No -> Yes.
+Would you like a login shell to be accessible over serial? -> No
+Would you like the serial port hardware to be enabled? -> yes
 
 ### 3.1 Virtuelleumgebung bauen und aktivieren  
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
-cd <Projektverzeichnis>  
 python3 -m venv .<venv name>  
 source .<venv name>/bin/activate  
 ```

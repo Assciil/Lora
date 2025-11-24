@@ -6,6 +6,6 @@ if __name__ == "__main__":
     node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=63535,power=22,rssi=True,air_speed=2400, relay=False, duty_cycle=0.01, buffer_size = 32)
     while True:
         node.send_string(64535, 868, string)
-        print("Sent")
+        print("Schatz 1: liegt in Raum XYZ bei dem Pult. Du kannst es abholen und 62234 nach dem Code fragen.")
         time.sleep(5)  
         
