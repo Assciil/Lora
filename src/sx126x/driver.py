@@ -108,6 +108,18 @@ class sx126x:
         self.ser.flushInput()
         self.set(freq,addr,power,rssi,air_speed,net_id,buffer_size,crypt,relay,lbt,wor)
 
+    def get_address(self):
+        return self.addr
+    
+    def set_address(self,addr:int):
+        self.addr = addr
+
+    def get_frequency(self):
+        return self.freq
+    
+    def set_frequency(self,freq:int):
+        self.freq = freq
+
     def set(self,freq,addr,power,rssi,air_speed=2400,\
             net_id=0,buffer_size = 240,crypt=0,\
             relay=False,lbt=False,wor=False):
@@ -230,6 +242,7 @@ class sx126x:
         GPIO.output(self.M1,GPIO.LOW)
         time.sleep(0.1)
 
+
     def get_settings(self):
         # the pin M1 of lora HAT must be high when enter setting mode and get parameters
         GPIO.output(M1,GPIO.HIGH)
@@ -346,12 +359,12 @@ class sx126x:
         if self.ser.inWaiting() > 0:
             time.sleep(0.1)
             re_temp = self.ser.read(self.ser.inWaiting())
-        if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
-            print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
+        #if re_temp[0] == 0xC1 and re_temp[1] == 0x00 and re_temp[2] == 0x02:
+            #print("the current noise rssi value: -{0}dBm".format(256-re_temp[3]))
             # print("the last receive packet rssi value: -{0}dBm".format(256-re_temp[4]))
-        else:
+        #else:
             # pass
-            print("receive rssi value fail")
+            #print("receive rssi value fail")
             # print("receive rssi value fail: ",re_temp)
 
     def send_string(self, addr: int, freq_mhz: int, string: str):
