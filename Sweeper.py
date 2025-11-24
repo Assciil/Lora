@@ -32,6 +32,7 @@ if __name__ == "__main__":
         node.set_address(address)
         freq = F_MIN
         node.set_frequency(freq)
+        print(datetime.now(), "Tuning to frequency:", freq, "MHz")
         # läuft dauerhaft weiter, Frequenz wird nur bis F_MAX hochgerampt
 
         while freq <= F_MAX:
