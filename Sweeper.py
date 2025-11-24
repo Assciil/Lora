@@ -3,7 +3,7 @@ from sx126x import sx126x
 import time
 
 F_MIN     = 862     # sinnvoll für SX126x im 868-MHz-Band
-F_MAX     = 870     # Beispiel: 868–878 MHz
+F_MAX     = 864     # Beispiel: 868–878 MHz
 STEP_F    = 1       # 1 MHz Schritte
 STEP_T    = 7.0    # alle 10 Sekunden
 
