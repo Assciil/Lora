@@ -31,6 +31,7 @@ if __name__ == "__main__":
     for address in ADDR:
         node.set_address(address)
         freq = F_MIN
+        node.set_frequency(freq)
         # läuft dauerhaft weiter, Frequenz wird nur bis F_MAX hochgerampt
 
         while freq <= F_MAX:
@@ -40,14 +41,15 @@ if __name__ == "__main__":
             if (now - last_time) >= STEP_T:
                 last_time = now
                 print(datetime.now(), "Tuning to frequency:", freq, "MHz")
-
+                freq += STEP_F
                 # HIER deine set()-Methode verwenden
                 node.set_frequency(freq)
+
 
             # kein delay im Hauptloop – du empfängst permanent
             text = node.receive()
             if text is not None:
                 print("Received:", text)
 
-            freq += STEP_F
+            
         
