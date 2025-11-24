@@ -14,7 +14,7 @@ AIR_SPEED = 2400
 BUFFER_SZ = 64
 
 if __name__ == "__main__":
-    # Node einmal initialisieren, irgendeine Startadresse ist ok
+    # Node einmal initialisieren
     node = sx126x(
         serial_num="/dev/ttyS0",
         freq=F_MIN,
@@ -54,7 +54,6 @@ if __name__ == "__main__":
             if (now - last_time) >= STEP_T:
                 last_time = now
 
-                # wenn wir schon bei F_MAX sind, fertig mit dieser Adresse
                 if freq >= F_MAX:
                     break
 
@@ -70,8 +69,8 @@ if __name__ == "__main__":
                     buffer_size=BUFFER_SZ,
                     relay=False,
                 )
-
-            # kein delay im Loop – Empfang läuft kontinuierlich
+                
+            # Empfang prüfen
             text = node.receive()
             if text is not None:
                 print("Received:", text)
