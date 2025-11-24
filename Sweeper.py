@@ -7,7 +7,7 @@ F_MAX     = 864     # Beispiel: 868–878 MHz
 STEP_F    = 1       # 1 MHz Schritte
 STEP_T    = 7.0    # alle 10 Sekunden
 
-ADDR      = [64534, 64535]
+ADDR      = [64535, 64535]
 POWER     = 22
 RSSI_ON   = True
 AIR_SPEED = 2400
