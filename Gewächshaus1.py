@@ -7,5 +7,5 @@ if __name__ == "__main__":
     while True:
         node.send_string(64535, 868, string)
         print("Schatz 1: liegt in Raum XYZ bei dem Pult. Du kannst es abholen und 62234 nach dem Code fragen.")
-        time.sleep(5)  
+        #time.sleep(5)  
         
