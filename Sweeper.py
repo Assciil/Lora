@@ -3,7 +3,7 @@ from sx126x import sx126x
 import time
 
 F_MIN     = 862      # MHz
-F_MAX     = 864      # MHz
+F_MAX     = 870      # MHz
 STEP_F    = 1        # 1 MHz Schritte
 STEP_T    = 7.0      # alle 7 Sekunden
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
             buffer_size=BUFFER_SZ,
             relay=False,
         )
-        print(datetime.now(), "Tuning to frequency:", freq, "MHz @ addr", address)
+        print(time.now(), "Tuning to frequency:", freq, "MHz")
 
         # Rampe: alle STEP_T Sekunden +1 MHz, bis F_MAX erreicht
         while True:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                     break
 
                 freq += STEP_F
-                print(datetime.now(), "Tuning to frequency:", freq, "MHz @ addr", address)
+                print(time.now(), "Tuning to frequency:", freq, "MHz")
 
                 node.set(
                     freq=freq,
