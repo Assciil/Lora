@@ -44,7 +44,7 @@ if __name__ == "__main__":
             buffer_size=BUFFER_SZ,
             relay=False,
         )
-        print(time.now(), "Tuning to frequency:", freq, "MHz")
+        print("Tuning to frequency:", freq, "MHz")
 
         # Rampe: alle STEP_T Sekunden +1 MHz, bis F_MAX erreicht
         while True:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                     break
 
                 freq += STEP_F
-                print(time.now(), "Tuning to frequency:", freq, "MHz")
+                print("Tuning to frequency:", freq, "MHz")
 
                 node.set(
                     freq=freq,
