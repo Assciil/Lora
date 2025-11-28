@@ -11,7 +11,7 @@ ADDR_LIST = [64534, 64535]
 POWER     = 22
 RSSI_ON   = True
 AIR_SPEED = 2400
-BUFFER_SZ = 64
+BUFFER_SZ = 128
 
 if __name__ == "__main__":
     # Node einmal initialisieren
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                     buffer_size=BUFFER_SZ,
                     relay=False,
                 )
-                
+
             # Empfang prüfen
             text = node.receive()
             if text is not None:

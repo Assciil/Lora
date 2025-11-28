@@ -24,14 +24,18 @@ Choose Interfacing Options -> Serial -> No -> Yes.
 Would you like a login shell to be accessible over serial? -> No
 Would you like the serial port hardware to be enabled? -> yes
 
-### 3.1 Virtuelleumgebung bauen und aktivieren  
+### 3.1 Virtuelleumgebung bauen
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
 python3 -m venv .<venv name>  
+```
+### 3.2 Virtuelleumgebung aktivieren 
+```bash
 source .<venv name>/bin/activate  
 ```
 
-### 3.2 Pakete installieren  
+
+### 3.3 Pakete installieren  
 ```bash
 pip install -U pip  
 pip install pyserial RPi.GPIO  
@@ -54,7 +58,6 @@ if __name__ == "__main__":
         time.sleep(10)
         
 ```
-
 
 ### 4.2 Receiver  
 ```python
