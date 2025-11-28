@@ -201,8 +201,8 @@ class sx126x:
             if self.ser.inWaiting() > 0:
                 time.sleep(0.1)
                 r_buff = self.ser.read(self.ser.inWaiting())
-                if r_buff[0] == 0xC1:
-                    pass
+                #if r_buff[0] == 0xC1:
+                    #pass
                     # print("parameters setting is :",end='')
                     # for i in self.cfg_reg:
                         # print(hex(i),end=' ')
@@ -212,8 +212,8 @@ class sx126x:
                     # for i in r_buff:
                         # print(hex(i),end=' ')
                     # print('\r\n')
-                else:
-                    pass
+                #else:
+                    #pass
                     #print("parameters setting fail :",r_buff)
                 break
             else:
