@@ -26,20 +26,26 @@ Choose Interfacing Options -> Serial -> `No` -> `Yes`.
   - Would you like a login shell to be accessible over serial? -> `No`
   - Would you like the serial port hardware to be enabled? -> `Yes`
 
-### 3.1 Virtuelle Umgebung bauen
+### 3.2 Virtuelle Umgebung
 Eine virtuelle Umgebung ist ein abgetrennter Python-Arbeitsbereich mit eigenen installierten Paketen, welche unabhängig vom System sind.
+
+#### Virtuelle Umgebung bauen
 
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
 python3 -m venv .<venv name>  
 ```
-### 3.2 Virtuelle Umgebung aktivieren 
+
+#### Virtuelle Umgebung aktivieren 
+
 ```bash
 source .<venv name>/bin/activate 
 ```
-Mit `deactivate`kann die virtuelle Umgebung wieder verlassen werden.
+- Mit `deactivate`kann die virtuelle Umgebung wieder verlassen werden.
 
-### 3.3 Pakete installieren  
+#### Pakete installieren  
+Installiert die Library und alle sonstigen notwendigen Pakete.
+
 ```bash
 pip install -U pip  
 pip install pyserial RPi.GPIO  
@@ -47,7 +53,7 @@ pip install "git+https://github.com/Assciil/Lora.git@main"
 ```
 
 ### 4. Klassenbeschreibung `sx126x`
-Repräsentiert ein SX126x-LoRa-Modul am Raspberry Pi (z.B. Pi 4B) und kapselt die gesamte UART-/GPIO-Konfiguration sowie Senden/Empfangen.
+Repräsentiert ein SX126x-LoRa-Modul am Raspberry Pi und kapselt die gesamte UART-/GPIO-Konfiguration sowie Senden/Empfangen.
 
 #### Konstruktor
 
@@ -75,7 +81,7 @@ und schreibt die aktuellen Einstellungen ins Modul.
 | `buffer_size` | int  | `240`         | Paket-/Buffergröße in Byte (240, 128, 64, 32).
 
 
-### Methoden
+### 4.1 Methoden
 
 #### `set(...)`
 
@@ -98,27 +104,15 @@ set(
 Setzt die Funkparameter zur Laufzeit neu (Frequenz, Adresse, Leistung, Datenrate, etc.)
 und schreibt sie ins Modul.
 
-- **Hinweis:** Wird automatisch im Konstruktor aufgerufen.
-
 #### `receive()`
 
 ```python
 receive() -> Optional[str]
 ```
 
-Liest eingehende Daten vom Modul, wertet optional RSSI aus und gibt den Payload (ohne Header)
-als UTF-8-String zurück.
+Liest eingehende Daten vom Modul, gibt den Payload (ohne Header) als UTF-8-String zurück.
 
 - Gibt `None` zurück, wenn keine Daten verfügbar sind.
-- Gibt nur den Nutzdaten-Teil zurück (`r_buff[3:-1]` im Code).
-
-**Beispiel**
-
-```python
-msg = radio.receive()
-if msg is not None:
-    print("Empfangen:", msg)
-```
 
 #### `send_string(addr: int, freq_mhz: int, string: str)`
 
@@ -155,7 +149,6 @@ if __name__ == "__main__":
 
 ### 4.2 Receiver  
 ```python
-from datetime import datetime  
 from sx126x import sx126x  
 
 if __name__ == "__main__":  
