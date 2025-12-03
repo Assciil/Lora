@@ -9,22 +9,15 @@ STEP_T    = 7.0      # alle 7 Sekunden
 
 ADDR_LIST = [64534, 64535]
 POWER     = 22
-RSSI_ON   = True
-AIR_SPEED = 2400
 BUFFER_SZ = 128
 
 if __name__ == "__main__":
     # Node einmal initialisieren
     node = sx126x(
-        serial_num="/dev/ttyS0",
         freq=F_MIN,
         addr=ADDR_LIST[0],
         power=POWER,
-        rssi=RSSI_ON,
-        air_speed=AIR_SPEED,
-        relay=False,
-        duty_cycle=0.01,
-        buffer_size=BUFFER_SZ,
+        buffer_size=BUFFER_SZ
     )
 
     for address in ADDR_LIST:
@@ -39,10 +32,7 @@ if __name__ == "__main__":
             freq=freq,
             addr=address,
             power=POWER,
-            rssi=RSSI_ON,
-            air_speed=AIR_SPEED,
             buffer_size=BUFFER_SZ,
-            relay=False,
         )
         print("Tuning to frequency:", freq, "MHz")
 
@@ -64,10 +54,7 @@ if __name__ == "__main__":
                     freq=freq,
                     addr=address,
                     power=POWER,
-                    rssi=RSSI_ON,
-                    air_speed=AIR_SPEED,
                     buffer_size=BUFFER_SZ,
-                    relay=False,
                 )
 
             # Empfang prüfen

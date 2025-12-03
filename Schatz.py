@@ -11,7 +11,7 @@ if __name__ == "__main__":
         5: ("Schatz 5: liegt in Raum XYZ bei dem Pult. Sende den Geheimcode an 63535 um das Passwort zu erhalten. <Geheimcode> - <Eigene Adresse>", 64534, 863)
     }
 
-    node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=63535,power=22,rssi=True,air_speed=2400, relay=False, duty_cycle=0.01, buffer_size = 128)
+    node = sx126x(freq=868,addr=64535,power=22, buffer_size = 32)
     
     while True:
         for nr, (text, addr, freq) in schatz.items():

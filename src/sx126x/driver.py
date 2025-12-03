@@ -80,7 +80,7 @@ class sx126x:
         32:SX126X_PACKAGE_SIZE_32_BYTE
     }
 
-    def __init__(self,serial_num,freq,addr,power,rssi,air_speed=2400,\
+    def __init__(self,freq,addr,power, serial_num = "/dev/ttyS0", rssi = True,air_speed=2400,\
                  net_id=0,buffer_size = 240,crypt=0,\
                  relay=False,lbt=False,wor=False, duty_cycle=0.01):
         self.rssi = rssi
