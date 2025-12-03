@@ -6,10 +6,10 @@ Long Range (LoRa) ist eine Modulationsart, mit der kleine Datenmengen, beispiels
 
 Häufig wird LoRa im Zusammenhang mit LoRaWAN genannt. Dabei handelt es sich um ein auf LoRa basierendes Kommunikationsprotokoll mit dem Low-Power Wide Area Networks (LPWANs) aufgebaut werden können. Das Protokoll von LoRaWAN setzt ein echtzeitfähige Hardware voraus, weswegen es ohne weiteren Zusatz nicht Raspberry Pi geeignet ist.[2]  
 
-In Europa erfolgt der Betrieb im unlizenzierten ISM/SRD-Band 863–870 MHz, das ohne individuelle Funklizenz genutzt werden darf. Die Nutzung dieses Frequenzbands ist klar geregelt: maßgeblich sind die ETSI-Norm EN 300 220 sowie die Frequenznutzungsbestimmungen der muss d Bundesnetzagentur (BNetzA). Eine zentrale Vorgabe ist der Duty-Cycle: Das Band darf in der Regel maximal zu 1 % belegt werden, d. h. 36 Sekunden Sendezeit pro Stunde pro Kanal. Außerdem beträgt die maximal erlaubte Sendeleistung 25 mW ERP. Die beigefügte Bibliothek stellt die Einhaltung der Richtlinien in Deutschland sicher. (nochmal überprüfen!!), dennoch liegt die Verantwortung für einen Regelkonformen Betrieb beim Anwender. 
+In Europa erfolgt der Betrieb im unlizenzierten ISM/SRD-Band 863–870 MHz, das ohne individuelle Funklizenz genutzt werden darf. Die Nutzung dieses Frequenzbands ist klar geregelt: maßgeblich sind die ETSI-Norm EN 300 220 sowie die Frequenznutzungsbestimmungen der Bundesnetzagentur (BNetzA). Eine zentrale Vorgabe ist der Duty-Cycle: Das Band darf in der Regel maximal zu 1 % belegt werden, d. h. 36 Sekunden Sendezeit pro Stunde pro Kanal. Außerdem beträgt die maximal erlaubte Sendeleistung 25 mW ERP. 
 
 ### 2. Hardwareaufbau - LoRa Kommunikation zwischen zwei Raspberry Pis  
-Für die Punkt-zu-Punkt-Kommunikation werden zwei Raspberry Pis identisch konfiguriert. Auf beide wird je ein "SX1262 868M LoRa HAT" -Modul aufgesteckt. Auf jedem Modul wir eine Antenne aufgeschraubt und die Jumper gemäß untenstehendem Bild gesetzt.
+Für die Punkt-zu-Punkt-Kommunikation werden zwei Raspberry Pis identisch konfiguriert. Auf beide wird je ein "SX1262 868M LoRa HAT" -Modul aufgesteckt. Auf jedem Modul wird eine Antenne aufgeschraubt und die Jumper werden gemäß untenstehendem Bild gesetzt.
 
 Die Jumper sind bei beiden gemäß folgender Grafik zusetzen: 
 ![alt text](Jumper%20Config.png)
@@ -17,23 +17,27 @@ Die Jumper sind bei beiden gemäß folgender Grafik zusetzen:
 ### 3. Installation  
 
 ### 3.1 Enable serial Port
+Der Raspberry Pi kommuniziert über UART (seriell) mit dem Lora-Modul.
+
 ```bash
 sudo raspi-config
 ```
-Choose Interfacing Options -> Serial -> No -> Yes.
-Would you like a login shell to be accessible over serial? -> No
-Would you like the serial port hardware to be enabled? -> yes
+Choose Interfacing Options -> Serial -> `No` -> `Yes`.
+  - Would you like a login shell to be accessible over serial? -> `No`
+  - Would you like the serial port hardware to be enabled? -> `Yes`
 
-### 3.1 Virtuelleumgebung bauen
+### 3.1 Virtuelle Umgebung bauen
+Eine virtuelle Umgebung ist ein abgetrennter Python-Arbeitsbereich mit eigenen installierten Paketen, welche unabhängig vom System sind.
+
 ```bash
 sudo apt install -y python3 python3-venv python3-pip  
 python3 -m venv .<venv name>  
 ```
-### 3.2 Virtuelleumgebung aktivieren 
+### 3.2 Virtuelle Umgebung aktivieren 
 ```bash
-source .<venv name>/bin/activate  
+source .<venv name>/bin/activate 
 ```
-
+Mit `deactivate`kann die virtuelle Umgebung wieder verlassen werden.
 
 ### 3.3 Pakete installieren  
 ```bash
@@ -42,7 +46,97 @@ pip install pyserial RPi.GPIO
 pip install "git+https://github.com/Assciil/Lora.git@main"  
 ```
 
-### 4. Example Code  
+### 4. Klassenbeschreibung `sx126x`
+Repräsentiert ein SX126x-LoRa-Modul am Raspberry Pi (z.B. Pi 4B) und kapselt die gesamte UART-/GPIO-Konfiguration sowie Senden/Empfangen.
+
+#### Konstruktor
+
+```python
+sx126x(
+    freq: int,
+    addr: int,
+    power: int,
+    buffer_size: int = 240,
+)
+```
+
+**Beschreibung**
+
+Initialisiert das LoRa-Modul, setzt die GPIO-Pins, öffnet die serielle Schnittstelle
+und schreibt die aktuellen Einstellungen ins Modul.
+
+**Parameter**
+
+| Name         | Typ    | Standard      | Beschreibung                                           |
+|-------------|--------|---------------|--------------------------------------------------------|
+| `freq`      | int    | –             | Frequenz in MHz (z.B. 868 für 868 MHz).               |
+| `addr`      | int    | –             | Geräte-/Node-Adresse (0–65535).                       |
+| `power`     | int    | –             | Sendeleistung in dBm (10, 13, 17, 22).                |
+| `buffer_size` | int  | `240`         | Paket-/Buffergröße in Byte (240, 128, 64, 32).
+
+
+### Methoden
+
+#### `set(...)`
+
+```python
+set(
+    freq: int,
+    addr: int,
+    power: int,
+    rssi: bool,
+    air_speed: int = 2400,
+    net_id: int = 0,
+    buffer_size: int = 240,
+    crypt: int = 0,
+    relay: bool = False,
+    lbt: bool = False,
+    wor: bool = False,
+)
+```
+
+Setzt die Funkparameter zur Laufzeit neu (Frequenz, Adresse, Leistung, Datenrate, etc.)
+und schreibt sie ins Modul.
+
+- **Hinweis:** Wird automatisch im Konstruktor aufgerufen.
+
+#### `receive()`
+
+```python
+receive() -> Optional[str]
+```
+
+Liest eingehende Daten vom Modul, wertet optional RSSI aus und gibt den Payload (ohne Header)
+als UTF-8-String zurück.
+
+- Gibt `None` zurück, wenn keine Daten verfügbar sind.
+- Gibt nur den Nutzdaten-Teil zurück (`r_buff[3:-1]` im Code).
+
+**Beispiel**
+
+```python
+msg = radio.receive()
+if msg is not None:
+    print("Empfangen:", msg)
+```
+
+#### `send_string(addr: int, freq_mhz: int, string: str)`
+
+```python
+send_string(addr: int, freq_mhz: int, string: str) -> None
+```
+
+Bequeme Helferfunktion, um einen String an einen Ziel-Knoten zu senden. Baut das
+Datenpaket inklusive Adressen und Frequenz-Offset auf und ruft intern `send(...)` auf.
+
+**Parameter**
+
+- `addr`: Zieladresse des Empfängers.
+- `freq_mhz`: Ziel-Frequenz in MHz (z.B. 868).
+- `string`: Nutzlast als Python-String (`str`), wird in UTF-8 kodiert.
+
+
+### 4. Beispiel Code
 
 ### 4.1 Transmitter
 
@@ -51,7 +145,7 @@ from sx126x import sx126x
 import time
 
 if __name__ == "__main__":
-    node = sx126x(serial_num="/dev/ttyS0", freq=868, addr=63535, power=22)
+    node = sx126x(freq=868,addr=64535,power=22, buffer_size = 32)
     while True:
         node.send_float(64535, 868, 23.5)
         print("Daten gesendet!")
@@ -65,7 +159,7 @@ from datetime import datetime
 from sx126x import sx126x  
 
 if __name__ == "__main__":  
-    node = sx126x(serial_num = "/dev/ttyS0",freq=868,addr=64535,power=22,rssi=True,air_speed=2400,relay=False, duty_cycle=0.01)  
+    node = sx126x(freq=868,addr=64535,power=22, buffer_size = 32) 
     while True:  
         text = node.receive()  
         if text is not None:  
@@ -76,16 +170,5 @@ if __name__ == "__main__":
 [2] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10122600  
 [3] https://www.waveshare.com/wiki/SX1262_868M_LoRa_HAT  
 [4] https://files.waveshare.com/upload/1/18/SX126X_LoRa_HAT_CODE.zip
-
-
-
-deactivate
-rm -r ssource .env
-python3 -m venv .env
-source .env/bin/activate
-
-pip install -U pip  
-pip install pyserial RPi.GPIO  
-pip install "git+https://github.com/Assciil/Lora.git@main"  
 
 
