@@ -21,7 +21,7 @@ if __name__ == "__main__":
         for nr, (text, addr, freq) in schatz.items():
             node.send_string(addr, freq, text)
             print("Send: ", addr, freq)
-            time.sleep(1.5)
+            time.sleep(1.4)
 
         print("Counter: ", counter)
         counter += 1
