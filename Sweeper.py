@@ -5,11 +5,11 @@ import time
 F_MIN     = 862      # MHz
 F_MAX     = 870      # MHz
 STEP_F    = 1        # 1 MHz Schritte
-STEP_T    = 12.0      # alle 7 Sekunden
+STEP_T    = 11.0      # alle 7 Sekunden
 
 ADDR_LIST = [64534, 64535]
 POWER     = 22
-BUFFER_SZ = 128
+BUFFER_SZ = 240
 
 if __name__ == "__main__":
     # Node einmal initialisieren
