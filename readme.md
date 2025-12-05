@@ -141,7 +141,7 @@ import time
 if __name__ == "__main__":
     node = sx126x(freq=868,addr=64535,power=22, buffer_size = 32)
     while True:
-        node.send_float(64535, 868, 23.5)
+        node.send_string(64535, 868, "Hello world!")
         print("Daten gesendet!")
         time.sleep(10)
         
