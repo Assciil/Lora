@@ -62,7 +62,7 @@ sx126x(
     freq: int,
     addr: int,
     power: int,
-    buffer_size: int = 240,
+    buffer_size: int
 )
 ```
 
