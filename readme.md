@@ -62,7 +62,7 @@ sx126x(
     freq: int,
     addr: int,
     power: int,
-    buffer_size: int
+    buffer_size: int = 240
 )
 ```
 
@@ -90,14 +90,7 @@ set(
     freq: int,
     addr: int,
     power: int,
-    rssi: bool,
-    air_speed: int = 2400,
-    net_id: int = 0,
-    buffer_size: int = 240,
-    crypt: int = 0,
-    relay: bool = False,
-    lbt: bool = False,
-    wor: bool = False,
+    buffer_size: int = 240
 )
 ```
 
