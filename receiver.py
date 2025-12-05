@@ -1,18 +1,10 @@
 from datetime import datetime
 from sx126x import sx126x
 
-def writeToFile(value, path="data.txt"):
-    now = datetime.now()
-    datum = now.strftime("%d.%m.%Y")
-    uhrzeit = now.strftime("%H:%M:%S")
-    zeile = f"datum: {datum} uhrzeit: {uhrzeit} wert: {value}"
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(zeile + "\n")
 
 if __name__ == "__main__":
-    node = sx126x(freq=868,addr=64535,power=22, buffer_size = 32)
+    node = sx126x(freq=862,addr=62333,power=22, buffer_size = 32)
     while True:
         text = node.receive()
         if text is not None:
             print("Received:", text)
-            writeToFile(text)
