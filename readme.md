@@ -113,8 +113,7 @@ Liest eingehende Daten vom Modul, gibt den Payload (ohne Header) als UTF-8-Strin
 send_string(addr: int, freq_mhz: int, string: str) -> None
 ```
 
-Bequeme Helferfunktion, um einen String an einen Ziel-Knoten zu senden. Baut das
-Datenpaket inklusive Adressen und Frequenz-Offset auf und ruft intern `send(...)` auf.
+Sendet einen String an einen Ziel-Knoten. Baut das Datenpaket inklusive Adressen und Frequenz-Offset auf.
 
 **Parameter**
 
